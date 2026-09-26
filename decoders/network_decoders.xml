@@ -1,0 +1,9 @@
+<decoder name="network_decoder">
+  <program_name>SF-IMS</program_name>
+</decoder>
+
+<decoder name="network_decoder_fields">
+  <parent>network_decoder</parent>
+  <regex type="pcre2">ADI:vdi\.radius \[([^\]]+)\] \{nas_ip = ([^,]+), mac_addr = ([^,]+), user_name = ([^,]+), domain = ([^,]+), host resolved identities = ([^,]+), networkDeviceProfileName = ([^,]+),netBiosName = ([^,]+), portId = ([^}]+)\}</regex>
+  <order>state,nas_ip,mac_addr,user_name,domain,host_resolved_identities,networkDeviceProfileName,netBiosName,portID</order>
+</decoder>
