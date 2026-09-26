@@ -1,0 +1,6 @@
+*.key
+*.pem
+*.p12
+*.pfx
+*client.keys*
+.env
