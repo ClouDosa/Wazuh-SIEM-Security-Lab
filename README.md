@@ -101,6 +101,15 @@ I then created a custom rule that matched the decoded event and validated it wit
 
 ![Custom Wazuh rule](Wazuh%20Technical%20Test/task2_rules_logtest_success.png)
 
+## Custom Detection Files
+
+The sanitized custom decoder and rule files used in this lab are included in the repository:
+
+- [Custom network decoder](decoders/network_decoders.xml)
+- [Custom local rules](rules/local_rules.xml)
+
+The decoder parses the structured network device log into fields that can be evaluated by Wazuh rules. The local rules then match the decoded event and generate the custom detections demonstrated in the screenshots above.
+
 ## Troubleshooting Performed
 
 This lab included several issues that required investigation rather than a clean one pass installation:
@@ -135,6 +144,10 @@ This lab included several issues that required investigation rather than a clean
 Wazuh-SIEM-Security-Lab/
 ├── README.md
 ├── SCREENSHOT MAP.md
+├── decoders/
+│   └── network_decoders.xml
+├── rules/
+│   └── local_rules.xml
 └── Wazuh Technical Test/
     └── PNG lab screenshots
 ```
@@ -145,7 +158,6 @@ Authentication material and Wazuh agent keys are not published in this repositor
 
 ## Future Improvements
 
-- Add sanitized copies of the custom decoder XML and local rule XML
 - Add an architecture diagram of the Wazuh server and monitored endpoints
 - Automate portions of the deployment using Ansible
 - Add additional detections mapped to MITRE ATT&CK techniques
