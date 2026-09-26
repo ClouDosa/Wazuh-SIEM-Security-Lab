@@ -1,0 +1,16 @@
+<group name="network_decoders,">
+
+<rule id="100010" level="5">
+  <decoded_as>network_decoder</decoded_as>
+  <field name="domain">xxx\.yz</field>
+  <description>Network device event: domain matches xxx.yz</description>
+</rule>
+
+<rule id="100011" level="8">
+  <decoded_as>network_decoder</decoded_as>
+  <field name="networkDeviceProfileName">^test$</field>
+  <field name="host_resolved_identities" negate="yes">^YYY-XXX-YYY\$@yyy\.zz$</field>
+  <description>Network device profile test with unexpected host resolved identity</description>
+</rule>
+
+</group>
