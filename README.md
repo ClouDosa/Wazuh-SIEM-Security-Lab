@@ -27,59 +27,59 @@ The goal was not only to get Wazuh running, but to validate the complete path fr
 
 I created the virtualized environment in VirtualBox, installed Ubuntu Server, and verified the server was ready for the Wazuh deployment.
 
-![Ubuntu server](screenshots/01%20environment/logged%20into%20ubuntu%20server.png)
+![Ubuntu server](screenshots/01%20environment/logged%20into%20ubuntu%20server.webp)
 
 ### 2. Wazuh Server Deployment
 
 I configured the Wazuh package repository, installed the Wazuh Indexer, Manager, Dashboard, and supporting services, and validated that the main Wazuh processes were running.
 
-![Repository setup](screenshots/02%20wazuh%20deployment/task1%201%20ssh%20gpgkey%20repo%20setup.png)
+![Repository setup](screenshots/02%20wazuh%20deployment/task1%201%20ssh%20gpgkey%20repo%20setup.webp)
 
-![Wazuh manager services](screenshots/02%20wazuh%20deployment/task1%201%20manager%20daemons%20status.png)
+![Wazuh manager services](screenshots/02%20wazuh%20deployment/task1%201%20manager%20daemons%20status.webp)
 
 I also confirmed access to the Wazuh Dashboard over HTTPS.
 
-![Wazuh dashboard](screenshots/02%20wazuh%20deployment/task1%201%20dashboard%20live%20with%20port443%20config.png)
+![Wazuh dashboard](screenshots/02%20wazuh%20deployment/task1%201%20dashboard%20live%20with%20port443%20config.webp)
 
-![Dashboard overview](screenshots/02%20wazuh%20deployment/task1%201%20dashboard%20overview.png)
+![Dashboard overview](screenshots/02%20wazuh%20deployment/task1%201%20dashboard%20overview.webp)
 
 ### 3. Troubleshooting and Recovery
 
 During the deployment I encountered storage and service issues instead of restarting the build from scratch. I investigated disk usage, identified the storage problem, extended the logical volume, and validated the additional space.
 
-![Disk full troubleshooting](screenshots/03%20troubleshooting/task1%201%20disc%20full%20error.png)
+![Disk full troubleshooting](screenshots/03%20troubleshooting/task1%201%20disc%20full%20error.webp)
 
-![LVM extension](screenshots/03%20troubleshooting/task1%201%20lvm%20extend.png)
+![LVM extension](screenshots/03%20troubleshooting/task1%201%20lvm%20extend.webp)
 
 I also worked through a Filebeat certificate and service issue and checked system resources, shards, permissions, and Wazuh data paths while troubleshooting.
 
-![Filebeat troubleshooting](screenshots/03%20troubleshooting/task1%201%20filebeat%20cert%20troubleshoot.png)
+![Filebeat troubleshooting](screenshots/03%20troubleshooting/task1%201%20filebeat%20cert%20troubleshoot.webp)
 
 ### 4. Linux and Windows Agent Enrollment
 
 I installed and started Wazuh agents, configured the required lab networking and port forwarding, and troubleshot an initial enrollment connection failure.
 
-![Enrollment connection troubleshooting](screenshots/04%20agent%20enrollment/task1%202%20cant%20connect%20to%20enrollment%20service.png)
+![Enrollment connection troubleshooting](screenshots/04%20agent%20enrollment/task1%202%20cant%20connect%20to%20enrollment%20service.webp)
 
 After correcting the connection path, the agent registered successfully through `wazuh-authd`.
 
-![Successful agent registration](screenshots/04%20agent%20enrollment/task1%202%20successful%20registration%20via%20wazuh%20authd.png)
+![Successful agent registration](screenshots/04%20agent%20enrollment/task1%202%20successful%20registration%20via%20wazuh%20authd.webp)
 
 I validated the Windows agent service and confirmed that the enrolled agents appeared as active in Wazuh.
 
-![Windows Wazuh agent](screenshots/04%20agent%20enrollment/task1%202%20windows%20agent%20service%20running.png)
+![Windows Wazuh agent](screenshots/04%20agent%20enrollment/task1%202%20windows%20agent%20service%20running.webp)
 
-![Active agents](screenshots/04%20agent%20enrollment/task1%202%20all%20dashboard%20agents%20wazuh%20active.png)
+![Active agents](screenshots/04%20agent%20enrollment/task1%202%20all%20dashboard%20agents%20wazuh%20active.webp)
 
 ### 5. Detection Validation with Failed SSH Authentication
 
 To verify that Wazuh was detecting endpoint security activity, I generated repeated failed SSH authentication attempts in the lab.
 
-![Failed SSH attempts](screenshots/05%20detection%20validation/task1%203%20creating%20fake%20entries.png)
+![Failed SSH attempts](screenshots/05%20detection%20validation/task1%203%20creating%20fake%20entries.webp)
 
 I then confirmed that the Wazuh alerts file recorded the activity and triggered rule **5712** for the SSH authentication failures.
 
-![Wazuh brute force alert](screenshots/05%20detection%20validation/task1%203%20bruteforce%20alert%20rule5712.png)
+![Wazuh brute force alert](screenshots/05%20detection%20validation/task1%203%20bruteforce%20alert%20rule5712.webp)
 
 ### 6. Custom Decoder and Detection Rule
 
@@ -97,11 +97,11 @@ The decoded fields included values such as:
 - `portID`
 - `state`
 
-![Custom decoder validation](screenshots/06%20custom%20decoder%20rule/task2%20decoder%20logtest%20success.png)
+![Custom decoder validation](screenshots/06%20custom%20decoder%20rule/task2%20decoder%20logtest%20success.webp)
 
 I then created a custom rule that matched the decoded event and validated it with `wazuh-logtest`. The final test generated custom rule ID **100011**, level **8**, for the unexpected host resolved identity condition.
 
-![Custom Wazuh rule](screenshots/06%20custom%20decoder%20rule/task2%20rules%20logtest%20success.png)
+![Custom Wazuh rule](screenshots/06%20custom%20decoder%20rule/task2%20rules%20logtest%20success.webp)
 
 ## Troubleshooting Performed
 
