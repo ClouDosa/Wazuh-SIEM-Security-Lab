@@ -6,6 +6,29 @@ This project documents the deployment and validation of a Wazuh security monitor
 
 The goal was not only to get Wazuh running, but to validate the complete path from endpoint activity to detection and alert generation.
 
+## Architecture
+
+The lab uses an Ubuntu Server virtual machine to host the Wazuh server components, including the Wazuh Manager, Indexer, Dashboard, and Filebeat. Linux and Windows endpoints run Wazuh agents and send security data back to the server for analysis.
+
+The project validates two detection paths. The first uses endpoint activity, where repeated failed SSH authentication attempts are collected and matched to an existing Wazuh detection rule. The second uses a custom network device log, where a decoder extracts structured fields and local rules evaluate those fields to generate a custom alert.
+
+```text
+Linux / Windows endpoints
+        |
+        v
+   Wazuh agents
+        |
+        v
+   Wazuh Manager
+        |
+        +----> Built in detection rules
+        |
+        +----> Custom decoder and local rules
+        |
+        v
+ Wazuh Indexer / Dashboard
+```
+
 ## Lab Environment
 
 - Oracle VirtualBox
@@ -83,8 +106,9 @@ I then confirmed that the Wazuh alerts file recorded the activity and triggered 
 
 I created a custom Wazuh decoder for a structured network device log and tested it with `wazuh-logtest`. The first decoder attempt produced a regex and configuration error, so I corrected the decoder and tested it again until the expected fields were parsed successfully.
 
-The decoded fields included values such as:
+The decoder identifies logs from `SF-IMS` and extracts the following fields:
 
+- `state`
 - `nas_ip`
 - `mac_addr`
 - `user_name`
@@ -93,22 +117,27 @@ The decoded fields included values such as:
 - `networkDeviceProfileName`
 - `netBiosName`
 - `portID`
-- `state`
 
 ![Custom decoder validation](Wazuh%20Technical%20Test/task2_decoder_logtest_success.png)
 
-I then created a custom rule that matched the decoded event and validated it with `wazuh-logtest`. The final test generated custom rule ID **100011**, level **8**, for the unexpected host resolved identity condition.
+I then created two local rules. Rule **100010** generates a level 5 event when the decoded domain matches the sanitized test value. Rule **100011** generates a level 8 event when the network device profile is `test` and the resolved identity does not match the expected sanitized value.
 
 ![Custom Wazuh rule](Wazuh%20Technical%20Test/task2_rules_logtest_success.png)
 
-## Custom Detection Files
+## Detection Engineering Files
 
-The sanitized custom decoder and rule files used in this lab are included in the repository:
+The sanitized detection files used in the lab are included so the project can be reviewed beyond screenshots:
 
 - [Custom network decoder](decoders/network_decoders.xml)
 - [Custom local rules](rules/local_rules.xml)
 
-The decoder parses the structured network device log into fields that can be evaluated by Wazuh rules. The local rules then match the decoded event and generate the custom detections demonstrated in the screenshots above.
+The decoder converts the structured network event into named fields. The local rules evaluate those fields and generate the custom detections demonstrated in the screenshots.
+
+## Validation Approach
+
+I validated the lab at each stage instead of treating installation success as the final result. Server processes and dashboard access were checked after deployment. Agent status was verified after enrollment. Failed SSH activity was intentionally generated and traced to the resulting Wazuh alert. The custom decoder and rules were tested with `wazuh-logtest` until the expected fields and rule IDs were returned.
+
+This gave me evidence that the complete monitoring path was working: endpoint or log activity was collected, parsed, evaluated, and turned into a visible security detection.
 
 ## Troubleshooting Performed
 
@@ -152,12 +181,16 @@ Wazuh-SIEM-Security-Lab/
     └── PNG lab screenshots
 ```
 
+## Project Evidence
+
+The `Wazuh Technical Test` folder contains the original lab screenshots used throughout this README. `SCREENSHOT MAP.md` provides an additional reference for the evidence set, while the `decoders` and `rules` folders contain the sanitized detection engineering files.
+
 ## Security Note
 
 Authentication material and Wazuh agent keys are not published in this repository. Screenshots are included only where they demonstrate configuration, troubleshooting, enrollment status, or detection results without intentionally exposing reusable credentials.
 
 ## Future Improvements
 
-- Add an architecture diagram of the Wazuh server and monitored endpoints
+- Add a visual architecture diagram of the Wazuh server and monitored endpoints
 - Automate portions of the deployment using Ansible
 - Add additional detections mapped to MITRE ATT&CK techniques
