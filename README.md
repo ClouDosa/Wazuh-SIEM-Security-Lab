@@ -189,8 +189,3 @@ The `Wazuh Technical Test` folder contains the original lab screenshots used thr
 
 Authentication material and Wazuh agent keys are not published in this repository. Screenshots are included only where they demonstrate configuration, troubleshooting, enrollment status, or detection results without intentionally exposing reusable credentials.
 
-## Future Improvements
-
-- Add a visual architecture diagram of the Wazuh server and monitored endpoints
-- Automate portions of the deployment using Ansible
-- Add additional detections mapped to MITRE ATT&CK techniques
